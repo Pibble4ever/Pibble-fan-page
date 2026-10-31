@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>$PIBBLE — I am Pibble. Wash my belly.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ffb6c1;
+      --soft-pink: #ffe4ec;
+      --cream: #fff9f5;
+      --mint: #a8e6cf;
+      --text: #2d2a32;
+      --muted: #6b6570;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', 'Nunito', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .bg-pattern {
+      position: fixed;
+      inset: 0;
+      background: url('bg.jpg') center/cover no-repeat;
+      opacity: 0.18;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 249, 245, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 182, 193, 0.3);
+      padding: 0.8rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo img {
+      height: 42px;
+      width: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--pink);
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: #e87a9a; }
+
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 5%;
+      text-align: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-content { max-width: 520px; }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #ff8fa3, #ffb6c1, #a8e6cf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      font-size: 1.4rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .hero-image {
+      max-width: 420px;
+      width: 100%;
+      border-radius: 32px;
+      box-shadow: 0 20px 50px rgba(255, 182, 193, 0.35);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff8fa3, #ffb6c1);
+      color: white;
+      padding: 0.9rem 1.8rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0.4rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 20px rgba(255, 143, 163, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(255, 143, 163, 0.5);
+    }
+
+    .btn.secondary {
+      background: white;
+      color: #e87a9a;
+      border: 2px solid #ffb6c1;
+      box-shadow: none;
+    }
+
+    section {
+      padding: 5rem 8%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.8rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transition: transform 0.25s;
+    }
+
+    .card:hover { transform: translateY(-6px); }
+
+    .card h3 {
+      margin-bottom: 0.6rem;
+      color: #e87a9a;
+    }
+
+    .ca-box {
+      background: #2d2a32;
+      color: white;
+      padding: 1.2rem 1.5rem;
+      border-radius: 16px;
+      font-family: ui-monospace, monospace;
+      text-align: center;
+      margin: 1.5rem auto;
+      max-width: 600px;
+      word-break: break-all;
+      position: relative;
+    }
+
+    .copy-btn {
+      background: var(--mint);
+      color: #2d2a32;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      margin-top: 0.6rem;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero { flex-direction: column-reverse; padding-top: 2rem; }
+      nav { display: none; }
+    }
+
+    /* Floating / falling bubbles */
+    .bubbles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -80px;
+      background: rgba(255, 160, 180, 0.55);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      border-radius: 50%;
+      animation: rise linear infinite;
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.6), 0 0 10px rgba(255,182,193,0.4);
+    }
+    .bubble::before {
+      content: '';
+      position: absolute;
+      top: 18%;
+      left: 22%;
+      width: 28%;
+      height: 28%;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(0.6); opacity: 0; }
+    }
+
+    #player {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 1px;
+      height: 1px;
+      opacity: 0.01;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .sound-btn {
+      position: fixed;
+      bottom: 1.2rem;
+      right: 1.2rem;
+      z-index: 200;
+      background: white;
+      border: 2px solid #ffb6c1;
+      border-radius: 999px;
+      width: 52px;
+      height: 52px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(255, 182, 193, 0.4);
+      transition: transform 0.2s;
+    }
+    .sound-btn:hover { transform: scale(1.08); }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="bubbles" id="bubbles"></div>
+
+  <button class="sound-btn" id="soundBtn" title="Play / Pause music">🔊</button>
+  <div id="player"></div>
+
+  <header>
+    <a href="#" class="logo">
+      <img src="logo.jpg" alt="Pibble logo" />
+      $PIBBLE
+    </a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="https://poolpad.app/token/Dif4zKmfXGYteAGczkGbmPCrYfDKHrxqsCCnxowQHhQC" target="_blank">Buy</a>
+      <a href="#community">Community</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>$PIBBLE</h1>
+      <p class="tagline">I am Pibble. Wash my belly. 🧼🐶</p>
+      <p style="margin-bottom: 1.5rem; color: var(--muted);">The cutest memecoin on the internet. No complicated lore. Just pure belly-washing vibes.</p>
+      <a href="https://poolpad.app/token/Dif4zKmfXGYteAGczkGbmPCrYfDKHrxqsCCnxowQHhQC" class="btn" target="_blank">Buy $PIBBLE</a>
+    </div>
+    <img src="hero-pibble.jpg" alt="Cute Pibble dog" class="hero-image" />
+  </section>
+
+  <section id="about">
+    <h2>What is Pibble?</h2>
+    <p class="subtitle">You already know. If not, spend 10 minutes on TikTok.</p>
+    <div class="cards">
+      <div class="card">
+        <h3>The Meme</h3>
+        <p>A tiny French bulldog puppy with the most demandable belly on the internet. “I am Pibble. Wash my belly.” It went everywhere.</p>
+      </div>
+      <div class="card">
+        <h3>The Coin</h3>
+        <p>Community-driven fun. No pretentious utility. Just pure, shareable, belly-washing energy. Hold it, meme it, wash it.</p>
+      </div>
+      <div class="card">
+        <h3>Why it works</h3>
+        <p>Simple. Cute. Endlessly remixable. The kind of meme that makes people smile and click buy without thinking too hard.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="buy">
+    <h2>How to Buy</h2>
+    <p class="subtitle">Contract address</p>
+    <div class="ca-box" id="ca">
+      Dif4zKmfXGYteAGczkGbmPCrYfDKHrxqsCCnxowQHhQC
+      <br />
+      <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('ca').innerText.split('\n')[0].trim())">Copy CA</button>
+    </div>
+    <p style="text-align:center; color:var(--muted); margin-top:1rem;">Buy on Jupiter / Raydium / Pumpfun. Wash my belly.</p>
+  </section>
+
+  <section id="community">
+    <h2>Join the Belly Washers</h2>
+    <p class="subtitle">Follow us on X</p>
+    <div style="text-align:center;">
+      <a href="https://x.com/Pibble4ever" class="btn" target="_blank">X / Twitter</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>$PIBBLE — Clean my belly. Just a very clean belly.</p>
+    <p style="margin-top:0.5rem;">Made with love and a sponge. 🧼</p>
+  </footer>
+
+  <script>
+    // Create a few bubbles
+    const bubblesContainer = document.getElementById('bubbles');
+    for (let i = 0; i < 26; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 28 + 14;
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.animationDuration = (Math.random() * 12 + 10) + 's';
+      b.style.animationDelay = (Math.random() * 8) + 's';
+      bubblesContainer.appendChild(b);
+    }
+
+    // YouTube background music
+    let player;
+    let isPlaying = false;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '1',
+        width: '1',
+        videoId: '-ALhBPQBH6k',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: '-ALhBPQBH6k',
+          modestbranding: 1,
+          rel: 0,
+          playsinline: 1
+        },
+        events: {
+          onReady: function() {
+            player.setVolume(70);
+          },
+          onStateChange: function(e) {
+            if (e.data === YT.PlayerState.ENDED) {
+              player.playVideo();
+            }
+            if (e.data === YT.PlayerState.PLAYING) {
+              isPlaying = true;
+              document.getElementById('soundBtn').textContent = '🔊';
+            }
+            if (e.data === YT.PlayerState.PAUSED) {
+              isPlaying = false;
+              document.getElementById('soundBtn').textContent = '🔇';
+            }
+          }
+        }
+      });
+    }
+
+    document.getElementById('soundBtn').addEventListener('click', function() {
+      if (!player || !player.playVideo) {
+        alert('Music player still loading... try again in a second.');
+        return;
+      }
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
+
+    // Load YouTube API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(tag);
+  </script>
+</body>
+</html>
