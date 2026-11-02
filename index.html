@@ -465,8 +465,8 @@
         return -1; // outside belly = no count
       }
 
-      // Divide the belly into a small grid of invisible zones
-      const cols = 3;
+      // Divide the belly into a bigger grid of invisible zones (fewer, larger zones)
+      const cols = 2;
       const rows = 2;
       const relX = (x - bellyLeft) / (bellyRight - bellyLeft);
       const relY = (y - bellyTop) / (bellyBottom - bellyTop);
