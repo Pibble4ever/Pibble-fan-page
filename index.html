@@ -465,14 +465,10 @@
         return -1; // outside belly = no count
       }
 
-      // Divide the belly into fewer, larger zones (much slower counting)
-      const cols = 2;
-      const rows = 1;
-      const relX = (x - bellyLeft) / (bellyRight - bellyLeft);
-      const relY = (y - bellyTop) / (bellyBottom - bellyTop);
-      const col = Math.min(cols - 1, Math.floor(relX * cols));
-      const row = Math.min(rows - 1, Math.floor(relY * rows));
-      return row * cols + col;
+      // Only two big zones: left half and right half of the belly
+      // Moving from one side to the other = +1
+      const mid = (bellyLeft + bellyRight) / 2;
+      return x < mid ? 0 : 1;
     }
 
     function moveSponge(clientX, clientY) {
