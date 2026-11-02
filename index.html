@@ -434,7 +434,7 @@
     let isDragging = false;
 
     // Load current global count
-    fetch('https://api.countapi.xyz/get/pibble-fanpage/belly-washes')
+    fetch('https://countapi.mileshilliard.com/api/v1/get/pibble-fanpage-belly-washes')
       .then(r => r.json())
       .then(data => { 
           const val = data.value || 0;
@@ -444,13 +444,14 @@
       .catch(() => { countEl.textContent = '0'; });
 
     function updateCount() {
-      fetch('https://api.countapi.xyz/hit/pibble-fanpage/belly-washes')
+      fetch('https://countapi.mileshilliard.com/api/v1/hit/pibble-fanpage-belly-washes')
         .then(r => r.json())
         .then(data => { 
           const val = data.value;
           countEl.textContent = val;
           document.getElementById('wash-times').textContent = val === 1 ? 'time' : 'times';
-        });
+        })
+        .catch(() => {});
     }
 
     function getZone(x, y, rect) {
