@@ -433,8 +433,8 @@
     let lastZone = -1;
     let isDragging = false;
 
-    // Load current global count
-    fetch('https://countapi.mileshilliard.com/api/v1/get/pibble-fanpage-belly-washes')
+    // Load current global count (new key so it starts at 0)
+    fetch('https://countapi.mileshilliard.com/api/v1/get/pibble-belly-wash-v2')
       .then(r => r.json())
       .then(data => { 
           const val = data.value || 0;
@@ -444,7 +444,7 @@
       .catch(() => { countEl.textContent = '0'; });
 
     function updateCount() {
-      fetch('https://countapi.mileshilliard.com/api/v1/hit/pibble-fanpage-belly-washes')
+      fetch('https://countapi.mileshilliard.com/api/v1/hit/pibble-belly-wash-v2')
         .then(r => r.json())
         .then(data => { 
           const val = data.value;
@@ -452,6 +452,22 @@
           document.getElementById('wash-times').textContent = val === 1 ? 'time' : 'times';
         })
         .catch(() => {});
+    }
+
+    function getZone(x, y, rect) {
+      // Strict belly bounds (the red area)
+      const bellyLeft = rect.width * 0.22;
+      const bellyRight = rect.width * 0.78;
+      const bellyTop = rect.height * 0.42;
+      const bellyBottom = rect.height * 0.72;
+
+      if (x < bellyLeft || x > bellyRight || y < bellyTop || y > bellyBottom) {
+        return -1; // outside belly
+      }
+
+      // Only two zones: left of center or right of center
+      const mid = rect.width * 0.5;
+      return x < mid ? 0 : 1;
     }
 
     function getZone(x, y, rect) {
