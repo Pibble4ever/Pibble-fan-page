@@ -430,7 +430,7 @@
     const washArea = document.getElementById('wash-area');
     const sponge = document.getElementById('sponge');
     const countEl = document.getElementById('wash-count');
-    let lastMove = 0;
+    let lastZone = -1;
     let isDragging = false;
 
     // Load current global count
@@ -453,6 +453,27 @@
         });
     }
 
+    function getZone(x, y, rect) {
+      // Only count movement inside the central belly area
+      const bellyLeft = rect.width * 0.25;
+      const bellyRight = rect.width * 0.75;
+      const bellyTop = rect.height * 0.45;
+      const bellyBottom = rect.height * 0.75;
+
+      if (x < bellyLeft || x > bellyRight || y < bellyTop || y > bellyBottom) {
+        return -1; // outside belly = no count
+      }
+
+      // Divide the belly into a small grid of invisible zones
+      const cols = 3;
+      const rows = 2;
+      const relX = (x - bellyLeft) / (bellyRight - bellyLeft);
+      const relY = (y - bellyTop) / (bellyBottom - bellyTop);
+      const col = Math.min(cols - 1, Math.floor(relX * cols));
+      const row = Math.min(rows - 1, Math.floor(relY * rows));
+      return row * cols + col;
+    }
+
     function moveSponge(clientX, clientY) {
       const rect = washArea.getBoundingClientRect();
       let x = clientX - rect.left;
@@ -464,9 +485,9 @@
       sponge.style.top = y + 'px';
       sponge.style.transform = 'translate(-50%, -50%)';
 
-      const now = Date.now();
-      if (now - lastMove > 120) { // increment every ~120ms of movement
-        lastMove = now;
+      const zone = getZone(x, y, rect);
+      if (zone !== lastZone) {
+        lastZone = zone;
         updateCount();
       }
     }
