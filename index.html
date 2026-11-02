@@ -430,11 +430,10 @@
     const washArea = document.getElementById('wash-area');
     const sponge = document.getElementById('sponge');
     const countEl = document.getElementById('wash-count');
-    let lastZone = -1;
     let isDragging = false;
 
-    // Load current global count (new key so it starts at 0)
-    fetch('https://countapi.mileshilliard.com/api/v1/get/pibble-belly-wash-v2')
+    // Load current global count (fresh key = starts at 0)
+    fetch('https://countapi.mileshilliard.com/api/v1/get/pibble-wash-v4')
       .then(r => r.json())
       .then(data => { 
           const val = data.value || 0;
@@ -444,7 +443,7 @@
       .catch(() => { countEl.textContent = '0'; });
 
     function updateCount() {
-      fetch('https://countapi.mileshilliard.com/api/v1/hit/pibble-belly-wash-v2')
+      fetch('https://countapi.mileshilliard.com/api/v1/hit/pibble-wash-v4')
         .then(r => r.json())
         .then(data => { 
           const val = data.value;
