@@ -409,10 +409,84 @@
     </div>
   </section>
 
+  <section id="wash" style="text-align:center; padding: 3rem 1rem 1rem;">
+    <p style="margin-bottom: 0.5rem; color: var(--muted); font-weight: 500;">Move the sponge and wash my belly</p>
+    <div id="wash-area" style="position: relative; width: 320px; height: 280px; margin: 0 auto; user-select: none; touch-action: none;">
+      <img src="wash-pibble.jpg" alt="Pibble" style="width: 100%; height: auto; border-radius: 24px; pointer-events: none;" />
+      <img id="sponge" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Crect x='5' y='5' width='90' height='50' rx='12' fill='%23ffe066' stroke='%23f4c430' stroke-width='4'/%3E%3Ccircle cx='30' cy='25' r='6' fill='%23fff3a0'/%3E%3Ccircle cx='55' cy='35' r='5' fill='%23fff3a0'/%3E%3Ccircle cx='70' cy='20' r='4' fill='%23fff3a0'/%3E%3C/svg%3E" style="position: absolute; width: 70px; height: auto; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: grab; z-index: 5; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));" />
+    </div>
+    <p style="margin-top: 1rem; font-size: 1.3rem; font-weight: 700; color: #e87a9a;">
+      Belly washed: <span id="wash-count">...</span> <span id="wash-times">times</span>
+    </p>
+  </section>
+
   <footer>
     <p>$PIBBLE — Clean my belly. Just a very clean belly.</p>
     <p style="margin-top:0.5rem;">Made with love and a sponge. 🧼</p>
   </footer>
+
+  <script>
+    // Belly washing counter (global via CountAPI)
+    const washArea = document.getElementById('wash-area');
+    const sponge = document.getElementById('sponge');
+    const countEl = document.getElementById('wash-count');
+    let lastMove = 0;
+    let isDragging = false;
+
+    // Load current global count
+    fetch('https://api.countapi.xyz/get/pibble-fanpage/belly-washes')
+      .then(r => r.json())
+      .then(data => { 
+          const val = data.value || 0;
+          countEl.textContent = val;
+          document.getElementById('wash-times').textContent = val === 1 ? 'time' : 'times';
+        })
+      .catch(() => { countEl.textContent = '0'; });
+
+    function updateCount() {
+      fetch('https://api.countapi.xyz/hit/pibble-fanpage/belly-washes')
+        .then(r => r.json())
+        .then(data => { 
+          const val = data.value;
+          countEl.textContent = val;
+          document.getElementById('wash-times').textContent = val === 1 ? 'time' : 'times';
+        });
+    }
+
+    function moveSponge(clientX, clientY) {
+      const rect = washArea.getBoundingClientRect();
+      let x = clientX - rect.left;
+      let y = clientY - rect.top;
+      // Keep sponge roughly over the belly area
+      x = Math.max(40, Math.min(x, rect.width - 40));
+      y = Math.max(80, Math.min(y, rect.height - 40));
+      sponge.style.left = x + 'px';
+      sponge.style.top = y + 'px';
+      sponge.style.transform = 'translate(-50%, -50%)';
+
+      const now = Date.now();
+      if (now - lastMove > 120) { // increment every ~120ms of movement
+        lastMove = now;
+        updateCount();
+      }
+    }
+
+    // Mouse
+    washArea.addEventListener('mousemove', (e) => {
+      if (e.buttons === 1 || isDragging) moveSponge(e.clientX, e.clientY);
+    });
+    sponge.addEventListener('mousedown', () => { isDragging = true; sponge.style.cursor = 'grabbing'; });
+    document.addEventListener('mouseup', () => { isDragging = false; sponge.style.cursor = 'grab'; });
+
+    // Touch (phone)
+    washArea.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const t = e.touches[0];
+      moveSponge(t.clientX, t.clientY);
+    }, { passive: false });
+    sponge.addEventListener('touchstart', () => { isDragging = true; });
+    document.addEventListener('touchend', () => { isDragging = false; });
+  </script>
 
   <script>
     // Create a few bubbles
