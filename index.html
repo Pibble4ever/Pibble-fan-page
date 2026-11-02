@@ -454,37 +454,22 @@
         .catch(() => {});
     }
 
-    function getZone(x, y, rect) {
-      // Strict belly bounds (the red area)
-      const bellyLeft = rect.width * 0.22;
-      const bellyRight = rect.width * 0.78;
-      const bellyTop = rect.height * 0.42;
-      const bellyBottom = rect.height * 0.72;
-
-      if (x < bellyLeft || x > bellyRight || y < bellyTop || y > bellyBottom) {
-        return -1; // outside belly
-      }
-
-      // Only two zones: left of center or right of center
-      const mid = rect.width * 0.5;
-      return x < mid ? 0 : 1;
-    }
+    let lastZone = -1;
 
     function getZone(x, y, rect) {
-      // Only count movement inside the central belly area
+      // Belly area only
       const bellyLeft = rect.width * 0.25;
       const bellyRight = rect.width * 0.75;
       const bellyTop = rect.height * 0.45;
-      const bellyBottom = rect.height * 0.75;
+      const bellyBottom = rect.height * 0.70;
 
       if (x < bellyLeft || x > bellyRight || y < bellyTop || y > bellyBottom) {
-        return -1; // outside belly = no count
+        return -1;
       }
 
-      // Only two big zones: left half and right half of the belly
-      // Moving from one side to the other = +1
-      const mid = (bellyLeft + bellyRight) / 2;
-      return x < mid ? 0 : 1;
+      // Simple left or right of center
+      const center = rect.width / 2;
+      return x < center ? 0 : 1;
     }
 
     function moveSponge(clientX, clientY) {
@@ -499,10 +484,12 @@
       sponge.style.transform = 'translate(-50%, -50%)';
 
       const zone = getZone(x, y, rect);
-      if (zone !== lastZone) {
-        lastZone = zone;
+
+      // Only count when crossing from one side to the other
+      if (zone !== -1 && lastZone !== -1 && zone !== lastZone) {
         updateCount();
       }
+      lastZone = zone;
     }
 
     // Mouse
